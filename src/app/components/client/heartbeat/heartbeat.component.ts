@@ -57,7 +57,7 @@ export class HeartbeatComponent {
     onTableSizeChange(event: any): void {
       this.tableSize = event.target.value;
       this.page = 1;
-      // this.getclient();
+      this.getclient();
     }
 
 
