@@ -1,0 +1,98 @@
+<div *ngIf="showHeartBeats" class="flex flex-col items-center mt-6 animate-fade-in">
+
+
+  <div
+    class="flex flex-row content-between justify-center gap-10 flex-wrap w-[70%] mx-auto"
+  >
+
+  <div>
+    <div
+      class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit p-4 rounded-lg bg-violet-400 border-emerald-400"
+    >
+      <div class="flex flex-row gap-2 items-center">
+        <i class="fa-solid fa-heart-pulse text-3xl"></i>
+      </div>
+      <p class="font-sans font-bold">{{ heartbeats[heartbeats.length - 1] }}</p>
+    </div>
+    <div
+      class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit rounded-lg mt-1 p-2 bg-violet-400 border-emerald-400"
+    >
+      <p
+        class="font-serif font-semibold text-sm text-white hover:cursor-pointer"
+      >
+      Battement de Coeur
+      </p>
+    </div>
+  </div>
+
+
+    <div>
+      <div
+        class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit p-4 rounded-lg bg-green-400 border-emerald-400"
+      >
+        <div class="flex flex-row gap-2 items-center">
+          <i class="fa-solid fa-temperature-half text-3xl"></i>
+        </div>
+        <p class="font-sans font-semibold">{{ temperature[temperature.length - 1] }}</p>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit rounded-lg mt-1 p-2 bg-green-400 border-emerald-400"
+      >
+        <p
+          class="font-serif font-semibold text-sm text-white hover:cursor-pointer"
+        >
+          Température
+        </p>
+      </div>
+    </div>
+
+    <div>
+      <div
+        class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit p-4 rounded-lg bg-sky-400 border-emerald-400"
+      >
+        <div class="flex flex-row gap-2 items-center">
+          <i class="fa-solid fa-flask text-3xl"></i>
+        </div>
+        <p class="font-sans font-bold">{{ oxymetry[oxymetry.length - 1] }}</p>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit rounded-lg mt-1 p-2 bg-sky-400 border-emerald-400"
+      >
+        <p
+          class="font-serif font-semibold text-sm text-white hover:cursor-pointer"
+        >
+          Oxymétrie
+        </p>
+      </div>
+    </div>
+
+
+    <div>
+      <div
+        class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit p-4 rounded-lg bg-orange-400 border-emerald-400"
+      >
+        <div class="flex flex-row gap-2 items-center">
+          <i class="fa-solid fa-person-praying text-3xl"></i>
+        </div>
+        <p class="font-sans font-bold">{{ stress[stress.length - 1] }}</p>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit rounded-lg mt-1 p-2 bg-orange-400 border-emerald-400"
+      >
+        <p
+          class="font-serif font-semibold text-sm text-white hover:cursor-pointer"
+        >
+          Niveau de Stress
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-[70%] h-fit mx-auto my-[2rem]">
+    <canvas #myChart></canvas>
+  </div>
+</div>
+
+<div class="w-fit h-1 text-black ml-[44rem] animate-fade-in" *ngIf="noHeartBeats">
+  <p class="mx-auto font-sans font-bold">No HeartBeats</p>
+</div>

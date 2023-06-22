@@ -1,0 +1,9 @@
+
+  <body [class.dark]="darkModeEnabled">
+  <app-header></app-header>
+  <app-sidebar (darkModeToggled)="darkModeEnabled = $event"></app-sidebar>
+  <router-outlet></router-outlet>
+
+  </body>
+
+
