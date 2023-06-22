@@ -48,9 +48,6 @@ export class ChartComponent implements OnChanges {
 
   getheartbeats(id: number) {
 
-    console.log(`id has changed : ${id}`);
-
-
     this.api.getHeartBeat(id).subscribe((res: Heartbeat[]) => {
       this.heartbeats = [];
       this.temperature = [];
