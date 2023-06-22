@@ -1,11 +1,9 @@
 import { Heartbeat } from "src/app/models/heartbeat.model";
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Input,
   ViewChild,
-  OnInit,
   OnChanges,
   SimpleChanges,
 } from "@angular/core";

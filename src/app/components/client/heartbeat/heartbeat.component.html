@@ -43,6 +43,7 @@
             <div style="margin-left: 25%" class="flex justify-start gap-4">
               <!-- Add a wrapper element around the SVG -->
               <svg
+                (click)="show = true"
                 (click)="showHeartBeat(item.id)"
                 (click)="selectRow(item)"
                 [ngClass]="{'fill-red-500': item.selected || item.id === selectedRowIndex}"
