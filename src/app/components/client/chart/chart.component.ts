@@ -36,7 +36,13 @@ export class ChartComponent implements OnChanges {
   noHeartBeats: boolean = false;
   showHeartBeats: boolean = false;
 
+
   constructor(private api: ClientService) {}
+
+  ngOnInit(): void {
+    this.getIdFromParent(this.info);
+    this.getheartbeats(this.id,);
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     this.getIdFromParent(this.info);

@@ -9,7 +9,6 @@
       transform: scale(1);
     }
   }
-
   @keyframes sunEffect {
     0% {
       transform: rotate(0);
@@ -21,12 +20,10 @@
       transform: rotate(360deg);
     }
   }
-
   button {
     .animate-moon {
       animation: moonEffect 1s ease-in-out;
     }
-
     .animate-sun {
       animation: sunEffect 1s ease-in-out;
     }

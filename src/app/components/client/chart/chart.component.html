@@ -1,8 +1,10 @@
-<div *ngIf="showHeartBeats" class="flex flex-col items-center mt-6 animate-fade-in">
+
+<div class="w-full dark:bg-gray-900  justify-center mt-6 animate-fade-in" *ngIf="showHeartBeats">
+
 
 
   <div
-    class="flex flex-row content-between justify-center gap-10 flex-wrap w-[70%] mx-auto"
+    class="flex flex-row content-between justify-center gap-10 flex-wrap w-[100%] mx-auto"
   >
 
   <div>
@@ -88,11 +90,11 @@
     </div>
   </div>
 
-  <div class="w-[70%] h-fit mx-auto my-[2rem]">
+  <div class="w-full h-screen mx-auto my-[2rem]">
     <canvas #myChart></canvas>
   </div>
 </div>
 
-<div class="w-fit h-1 text-black ml-[44rem] animate-fade-in" *ngIf="noHeartBeats">
-  <p class="mx-auto font-sans font-bold">No HeartBeats</p>
+<div class="w-full flex justify-center mt-6 animate-fade-in" *ngIf="noHeartBeats">
+  <p class="font-sans font-bold">No HeartBeats</p>
 </div>
