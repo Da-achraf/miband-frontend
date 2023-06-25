@@ -26,14 +26,13 @@ export class SidebarComponent {
 
   ngOnInit(): void {
     const storedArray = localStorage.getItem('sideBarItems');
-    const storedVar = localStorage.getItem('darkModeEnabled');
     console.log(storedArray);
 
-    if (storedArray && storedVar) {
+    if (storedArray) {
       console.log('hey');
 
       this.sidebarItems = JSON.parse(storedArray);
-      this.darkModeEnabled = JSON.parse(storedVar);
+
       console.log('Array retrieved:', this.sidebarItems);
 
       this.selectedItem = this.sidebarItems.find(item => {
@@ -77,7 +76,6 @@ export class SidebarComponent {
     });
 
     localStorage.setItem('sideBarItems', JSON.stringify(this.sidebarItems));
-    localStorage.setItem('darkModeEnabled', JSON.stringify(this.darkModeEnabled));
 
   }
 
