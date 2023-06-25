@@ -9,7 +9,7 @@
       transform: scale(1);
     }
   }
-  
+
   @keyframes sunEffect {
     0% {
       transform: rotate(0);
@@ -21,14 +21,25 @@
       transform: rotate(360deg);
     }
   }
-  
+
   button {
     .animate-moon {
       animation: moonEffect 1s ease-in-out;
     }
-  
+
     .animate-sun {
       animation: sunEffect 1s ease-in-out;
     }
   }
-  
+
+  .active-light {
+    /* background-color: rgb(243, 244, 246); */
+    background-color: rgb(243, 244, 246);
+    /* background-color: aqua; */
+  }
+
+  .active-dark {
+    /* background-color: rgb(154, 154, 155); */
+    background-color: rgb(55, 65, 81);
+    /* background-color: red; */
+  }
