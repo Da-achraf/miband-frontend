@@ -79,10 +79,7 @@ export class ChartComponent implements OnChanges, OnInit, AfterViewInit  {
   ngAfterViewInit(): void {
     this.api.modeChanged.subscribe((isDarkMode: boolean) => {
       this.darkModeEnabled = isDarkMode;
-      // this.lineChartOptions = this.utils.chartOptions(this.darkModeEnabled);
-      // this.lineChartData = this.utils.chartSchemeInit(this.data, this.labels);
       this.updateChartInputs();
-      // this.updateChart();
     });
   }
 

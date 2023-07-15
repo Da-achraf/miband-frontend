@@ -10,12 +10,7 @@ import { ClientService } from 'src/app/services/client.service';
 export class SidebarComponent {
 
 
-  sidebarItems = [
-    // { title: 'Dashbord', icon: 'fa-house', link: '/client/list', isActiveLight: true, isActiveDark: false },
-    { title: 'Clients', icon: 'fa-hospital-user', link: '/client/list', isActiveLight: true, isActiveDark: false },
-    { title: 'Heartbeats', icon: 'fa-chart-line', link: '/client/heartbeat', isActiveLight: false, isActiveDark: false },
-  ];
-
+  sidebarItems: any;
   selectedItem: any;
 
   collapse : boolean = false;
@@ -23,7 +18,14 @@ export class SidebarComponent {
   @Output() darkModeToggled: EventEmitter<boolean> = new EventEmitter<boolean>();
   darkModeEnabled = false;
 
-  constructor(private router: Router, private activatedRoute:ActivatedRoute, private clientService: ClientService){}
+  constructor(private router: Router, private activatedRoute:ActivatedRoute, private clientService: ClientService){
+    this.sidebarItems = [
+      // { title: 'Dashbord', icon: 'fa-house', link: '/client/list', isActiveLight: true, isActiveDark: false },
+      { title: 'Clients', icon: 'fa-hospital-user', link: '/client/list', isActiveLight: true, isActiveDark: false },
+      { title: 'Heartbeats', icon: 'fa-chart-line', link: '/client/heartbeat', isActiveLight: false, isActiveDark: false },
+    ];
+    localStorage.setItem('sideBarItems', JSON.stringify(this.sidebarItems));
+  }
 
   ngOnInit(): void {
     const storedArray = localStorage.getItem('sideBarItems');
@@ -36,7 +38,7 @@ export class SidebarComponent {
 
       console.log('Array retrieved:', this.sidebarItems);
 
-      this.selectedItem = this.sidebarItems.find(item => {
+      this.selectedItem = this.sidebarItems.find((item: any) => {
         return (item.isActiveDark || item.isActiveLight);
       })
 
@@ -52,7 +54,7 @@ export class SidebarComponent {
 
   toggleDarkMode() {
     localStorage.removeItem('darkModeEnabled');
-    let inedx = this.sidebarItems.findIndex(item => {
+    let inedx = this.sidebarItems.findIndex((item: any) => {
       return item.title == this.selectedItem.title;
     });
 
@@ -70,13 +72,13 @@ export class SidebarComponent {
 
   setActiveItem(item: any): void {
     this.selectedItem = item;
-    let inedx = this.sidebarItems.findIndex(item => {
+    let inedx = this.sidebarItems.findIndex((item: any) => {
       return item.title == this.selectedItem.title;
     });
 
     this.sidebarItems[inedx].isActiveDark = !this.sidebarItems[inedx].isActiveDark;
     this.sidebarItems[inedx].isActiveLight = !this.sidebarItems[inedx].isActiveLight;
-    this.sidebarItems.forEach((sidebarItem) => {
+    this.sidebarItems.forEach((sidebarItem: any) => {
       sidebarItem.isActiveLight = (sidebarItem === item && !this.darkModeEnabled);
       sidebarItem.isActiveDark = (sidebarItem === item && this.darkModeEnabled);
     });
