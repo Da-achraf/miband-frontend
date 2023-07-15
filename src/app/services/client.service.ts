@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Client } from '../models/client.model';
 import { Heartbeat } from '../models/heartbeat.model';
 
@@ -8,7 +8,7 @@ import { Heartbeat } from '../models/heartbeat.model';
   providedIn: 'root',
 })
 export class ClientService {
-  private url = 'http://154.49.137.28:8080';
+  private url = 'http://16.171.143.229:8080';
 
   constructor(private http: HttpClient) {}
 
@@ -19,9 +19,6 @@ export class ClientService {
   getClientById(id: number): Observable<Client> {
     return this.http.get<Client>(`${this.url}/getClientById/${id}`);
   }
-
-
-
 
 
   postClient(client: Client): Observable<any> {
@@ -59,13 +56,28 @@ export class ClientService {
     else return false;
   }
 
-  getHeartBeat(id: number){
-    return this.http.get<Heartbeat[]>("http://154.49.137.28:8080/getHeartbeatsByClient/"+id)
+  getHeartBeat(id: number): Observable<Heartbeat[]>{
+    return this.http.get<Heartbeat[]>(`${this.url}/getHeartbeatsByClient/${id}`)
 
   }
 
-  getOneClient(client: Client) {
-    return this.http.get<Client>("http://154.49.137.28:8080/getClientById/"+client.id);
+  getOneClient(id: number) {
+    return this.http.get<Client>(`${this.url}/getClientById/${id}`);
+  }
+
+  isDarkMode: boolean = false;
+  modeChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  toggleMode(): void {
+    this.isDarkMode = !this.isDarkMode;
+    this.modeChanged.emit(this.isDarkMode);
+  }
+
+  private selectedClientSubject = new BehaviorSubject<number>(0);
+  selectedClient$ = this.selectedClientSubject.asObservable();
+
+  setSelectedClient(id: number): void {
+    this.selectedClientSubject.next(id);
   }
 
 }

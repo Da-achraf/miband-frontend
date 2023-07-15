@@ -1,44 +1,38 @@
-
-<div class="w-full dark:bg-gray-900  justify-center mt-6 animate-fade-in" *ngIf="showHeartBeats">
-
-
-
-  <div
-    class="flex flex-row content-between justify-center gap-10 flex-wrap w-[100%] mx-auto"
-  >
-
-  <div>
-    <div
-      class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit p-4 rounded-lg bg-violet-400 border-emerald-400"
-    >
-      <div class="flex flex-row gap-2 items-center">
-        <i class="fa-solid fa-heart-pulse text-3xl"></i>
-      </div>
-      <p class="font-sans font-bold">{{ heartbeats[heartbeats.length - 1] }}</p>
-    </div>
-    <div
-      class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit rounded-lg mt-1 p-2 bg-violet-400 border-emerald-400"
-    >
-      <p
-        class="font-serif font-semibold text-sm text-white hover:cursor-pointer"
-      >
-      Battement de Coeur
-      </p>
-    </div>
-  </div>
-
-
-    <div>
+<div
+  class="mx-auto bg-[#F9F9FB] dark:bg-[#11233A] h-full justify-center mt-6"
+  *ngIf="showHeartBeats"
+>
+  <div class="flex flex-wrap justify-center gap-4 mx-auto">
+    <div [ngClass]="{ 'animate-pulse': !showChart }" class="w-[10rem]">
       <div
-        class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit p-4 rounded-lg bg-green-400 border-emerald-400"
+        class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-violet-400 border-emerald-400"
+      >
+        <div class="flex flex-row gap-2 items-center">
+          <i class="fa-solid fa-heart-pulse text-3xl"></i>
+        </div>
+        <p class="font-sans font-bold">{{ heartbeats }}</p>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center gap-2 rounded-lg mt-1 p-2 bg-violet-400 border-emerald-400"
+      >
+        <p
+          class="font-serif font-semibold text-sm text-white hover:cursor-pointer"
+        >
+          Battement de Coeur
+        </p>
+      </div>
+    </div>
+    <div [ngClass]="{ 'animate-pulse': !showChart }" class="w-[10rem]">
+      <div
+        class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-green-400 border-emerald-400"
       >
         <div class="flex flex-row gap-2 items-center">
           <i class="fa-solid fa-temperature-half text-3xl"></i>
         </div>
-        <p class="font-sans font-semibold">{{ temperature[temperature.length - 1] }}</p>
+        <p class="font-sans font-semibold">{{ temperature }}</p>
       </div>
       <div
-        class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit rounded-lg mt-1 p-2 bg-green-400 border-emerald-400"
+        class="flex flex-col items-center justify-center gap-2 rounded-lg mt-1 p-2 bg-green-400 border-emerald-400"
       >
         <p
           class="font-serif font-semibold text-sm text-white hover:cursor-pointer"
@@ -47,18 +41,17 @@
         </p>
       </div>
     </div>
-
-    <div>
+    <div [ngClass]="{ 'animate-pulse': !showChart }" class="w-[10rem]">
       <div
-        class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit p-4 rounded-lg bg-sky-400 border-emerald-400"
+        class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-sky-400 border-emerald-400"
       >
         <div class="flex flex-row gap-2 items-center">
           <i class="fa-solid fa-flask text-3xl"></i>
         </div>
-        <p class="font-sans font-bold">{{ oxymetry[oxymetry.length - 1] }}</p>
+        <p class="font-sans font-bold">{{ oxymetry }}</p>
       </div>
       <div
-        class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit rounded-lg mt-1 p-2 bg-sky-400 border-emerald-400"
+        class="flex flex-col items-center justify-center gap-2 rounded-lg mt-1 p-2 bg-sky-400 border-emerald-400"
       >
         <p
           class="font-serif font-semibold text-sm text-white hover:cursor-pointer"
@@ -67,19 +60,17 @@
         </p>
       </div>
     </div>
-
-
-    <div>
+    <div [ngClass]="{ 'animate-pulse': !showChart }" class="w-[10rem]">
       <div
-        class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit p-4 rounded-lg bg-orange-400 border-emerald-400"
+        class="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-orange-400 border-emerald-400"
       >
         <div class="flex flex-row gap-2 items-center">
           <i class="fa-solid fa-person-praying text-3xl"></i>
         </div>
-        <p class="font-sans font-bold">{{ stress[stress.length - 1] }}</p>
+        <p class="font-sans font-bold">{{ stress }}</p>
       </div>
       <div
-        class="flex flex-col items-center justify-center gap-2 w-[10rem] h-fit rounded-lg mt-1 p-2 bg-orange-400 border-emerald-400"
+        class="flex flex-col items-center justify-center gap-2 rounded-lg mt-1 p-2 bg-orange-400 border-emerald-400"
       >
         <p
           class="font-serif font-semibold text-sm text-white hover:cursor-pointer"
@@ -90,11 +81,68 @@
     </div>
   </div>
 
-  <div class="w-full h-screen mx-auto my-[2rem]">
-    <canvas #myChart></canvas>
+  <div
+    class="max-w-[55rem] flex flex-col items-center bg-[#F9F9FB] dark:bg-[#11233A] h-fit mx-auto my-8"
+  >
+    <div
+      class="flex items-center mb-3 bg-[#474747] rounded-lg"
+      [ngClass]="{ 'cursor-not-allowed': !showChart }"
+      (click)="refresh()"
+    >
+      <button
+        type="button"
+        [disabled]="!showChart"
+        class="text-white bg-[#42B9BE] font-medium self-stretch rounded-l-lg text-sm py-1 px-3 text-center"
+      >
+        <span class="font-semibold text-base">Refresh</span>
+      </button>
+      <i
+        [ngClass]="{ 'animate-spin': !showChart }"
+        class="fa-solid fa-arrow-rotate-right text-base text-white px-2 py-1 rounded-full bg-[#474747]"
+      ></i>
+    </div>
+
+    <!-- <div
+      *ngIf="showChart"
+      [ngClass]="{ 'animate-ping': !showChart }"
+      class="container"
+    >
+      <canvas
+        class="canva"
+        baseChart
+        [type]="'line'"
+        [data]="lineChartData"
+        [options]="lineChartOptions"
+        [legend]="lineChartLegend"
+      >
+      </canvas>
+    </div> -->
+    <div
+      *ngIf="showChart"
+      class="flex flex-col-reverse justify-center w-fit h-fit items-start gap-1 mt-2"
+    >
+      <canvas
+        class="canva"
+        baseChart
+        [width]="width"
+        [height]="height"
+        [type]="'line'"
+        [data]="lineChartData"
+        [options]="lineChartOptions"
+        [legend]="lineChartLegend"
+      >
+      </canvas>
+      <div (click)="scrollToTop()" class="p-3 self-center animate-bounce hover:animate-none hover:cursor-pointer">
+        <i [style.color]="darkModeEnabled ? '#B6BEC8' : 'black'" class="fa-solid fa-arrow-up text-lg"></i>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="w-full flex justify-center mt-6 animate-fade-in" *ngIf="noHeartBeats">
+<div
+  class="w-fit flex flex-col items-center mx-auto mt-6 p-5 bg-[#6eb1b3] dark:bg-[#5de8ec] rounded animate-ping"
+  *ngIf="noHeartBeats"
+>
   <p class="font-sans font-bold">No HeartBeats</p>
+  <i class="fa-solid fa-heart-crack text-3xl mt-2 text-red-600"></i>
 </div>

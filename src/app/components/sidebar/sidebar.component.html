@@ -1,27 +1,22 @@
-<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0  dark:bg-gray-800 dark:border-gray-700" [class.dark]="darkModeEnabled" aria-label="Sidebar">
-  <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-     <ul class="space-y-2 font-medium">
+<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full bg-[#494D55] md:shadow-md md:shadow-black sm:translate-x-0 dark:border-gray-700 dark:bg-[#0F172A]" [class.dark]="darkModeEnabled" aria-label="Sidebar">
+  <div class="h-[5rem] p-2 bg-[#42B9BE] text-center hover:cursor-pointer" (click)="doIt()" routerLink="/client/list">
+    <i class="fa-solid fa-staff-snake text-white text-3xl"></i>
+    <p class="text-white text-xl font-bold font-serif">Health Monitoring</p>
+  </div>
+  <div class="h-full w-full px-0 pb-4 overflow-y-auto bg-[#494D55] dark:bg-gray-800">
+    <ul class="font-semibold">
         <li *ngFor="let item of sidebarItems">
-           <a routerLink="{{item.link}}" [class.active-light]="item.isActiveLight" [class.active-dark]="item.isActiveDark" (click)="setActiveItem(item)" class="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
-              <!-- <svg aria-hidden="true" class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg> -->
-              <i *ngIf="darkModeEnabled" class="fa-solid {{item.icon}} text-xl text-white"></i>
-              <i *ngIf="!darkModeEnabled" class="fa-solid {{item.icon}} text-xl text-gray-700"></i>
-              <span *ngIf="darkModeEnabled" class="ml-3 text-white">{{ item.title }}</span>
-              <span *ngIf="!darkModeEnabled" class="ml-3 text-black">{{ item.title }}</span>
+           <a routerLink="{{item.link}}" [class.active-light]="item.isActiveLight" [class.active-dark]="item.isActiveDark" (click)="setActiveItem(item)" class="flex items-center h-[3rem] p-2 text-gray-900 w-full  hover:bg-[#31343A] dark:text-gray-100 dark:hover:bg-gray-700">
+              <i *ngIf="darkModeEnabled" class="fa-solid {{item.icon}} text-xl dark:text-gray-200 text-gray-700"></i>
+              <i *ngIf="!darkModeEnabled" class="fa-solid {{item.icon}} text-xl dark:text-gray-200 text-[#C8CACC]"></i>
+              <span *ngIf="darkModeEnabled" class="ml-3 text-black dark:text-gray-200">{{ item.title }}</span>
+              <span *ngIf="!darkModeEnabled" class="ml-3 text-[#C8CACC]">{{ item.title }}</span>
            </a>
         </li>
         <li>
-            <button (click)="toggleDarkMode()" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white w-full hover:bg-gray-100 dark:hover:bg-gray-700">
-
-                <!-- <svg *ngIf="!darkModeEnabled" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 transition-all duration-300 animate-moon">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
-                </svg> -->
-
-                <!-- <svg *ngIf="darkModeEnabled" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 transition-all duration-300 animate-sun">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-                </svg> -->
+            <button (click)="toggleDarkMode()" class="flex items-center p-2 text-[#C8CACC] dark:text-white w-full hover:bg-[#31343A] dark:hover:bg-gray-700">
                 <i *ngIf="darkModeEnabled" class="fa-regular fa-moon text-xl text-white"></i>
-                <i *ngIf="!darkModeEnabled" class="fa-solid fa-moon text-xl text-gray-600"></i>
+                <i *ngIf="!darkModeEnabled" class="fa-solid fa-moon text-xl text-[#C8CACC]"></i>
                 <span *ngIf="!darkModeEnabled" class="ml-4 whitespace-nowrap">Dark mode</span>
 
                 <span *ngIf="darkModeEnabled" class="ml-4 whitespace-nowrap">Light mode</span>

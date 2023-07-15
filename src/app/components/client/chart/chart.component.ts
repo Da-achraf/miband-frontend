@@ -1,4 +1,4 @@
-import { Heartbeat } from "src/app/models/heartbeat.model";
+import { Heartbeat } from 'src/app/models/heartbeat.model';
 import {
   Component,
   ElementRef,
@@ -6,167 +6,152 @@ import {
   ViewChild,
   OnChanges,
   SimpleChanges,
-} from "@angular/core";
-import { Chart } from "chart.js";
-import { ClientService } from "src/app/services/client.service";
+  AfterViewInit,
+  OnInit,
+  Output,
+  EventEmitter,
+  HostListener,
+} from '@angular/core';
+import { Chart, ChartConfiguration, ChartDataset, ChartOptions } from 'chart.js';
+import { ClientService } from 'src/app/services/client.service';
+import { ChartUtilsService } from 'src/app/services/chart-utils.service';
 
 @Component({
-  selector: "app-chart",
-  templateUrl: "./chart.component.html",
-  styleUrls: ["./chart.component.css"],
+  selector: 'app-chart',
+  templateUrl: './chart.component.html',
+  styleUrls: ['./chart.component.css'],
 })
-export class ChartComponent implements OnChanges {
-  @ViewChild("myChart") myChart!: ElementRef;
+export class ChartComponent implements OnChanges, OnInit, AfterViewInit  {
+  @Input() updateData: number = 0;
+  @Output() HeartBeatState = new EventEmitter<boolean>(false);
 
-  chartInstance: Chart | null = null;
+  showChart: boolean = false;
 
-  @Input() info!: string;
-  id: number = 0;
+  static MAX_CHART_WIDTH = 850;
 
-  heartbeat: Heartbeat[] = [];
-
-
+  public lineChartData: ChartConfiguration<'line'>['data'];
+  data: number[][] = [];
   labels: string[] = [];
-  heartbeats: number[] = []
-  temperature: number[] = []
-  oxymetry: number[] = []
-  stress: number[] = []
 
+  public lineChartOptions: ChartOptions<'line'>;
+  public lineChartLegend = true;
+
+  heartbeats: number = 0;
+  temperature: number = 0;
+  oxymetry: number = 0;
+  stress: number = 0;
+
+  width: number = 400;
+  height: number = 400;
 
   noHeartBeats: boolean = false;
   showHeartBeats: boolean = false;
+  darkModeEnabled: boolean = false;
 
+  screenWidth: number = 0;
 
-  constructor(private api: ClientService) {}
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.width = this.utils.getChartWidth()
+    this.getDataSet();
+  }
+
+  constructor(private api: ClientService, private utils: ChartUtilsService) {
+    this.width = this.utils.getChartWidth();
+    this.lineChartData = {
+      labels: [],
+      datasets: []
+    }
+    this.lineChartOptions = {}
+    this.darkModeEnabled = this.utils.getMode();
+  }
 
   ngOnInit(): void {
-    this.getIdFromParent(this.info);
-    this.getheartbeats(this.id,);
+    this.lineChartOptions = this.utils.chartOptions(this.utils.getMode());
+    this.getDataSet();
+    setTimeout(()=> {
+      console.log();
+      this.utils.scrollToBottom();
+    }, 500)
+    this.showChart = true;
+  }
+
+  ngAfterViewInit(): void {
+    this.api.modeChanged.subscribe((isDarkMode: boolean) => {
+      this.darkModeEnabled = isDarkMode;
+      // this.lineChartOptions = this.utils.chartOptions(this.darkModeEnabled);
+      // this.lineChartData = this.utils.chartSchemeInit(this.data, this.labels);
+      this.updateChartInputs();
+      // this.updateChart();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.getIdFromParent(this.info);
-    this.getheartbeats(this.id,);
+    if (!changes['updateData'].firstChange){
+      this.getDataSet();
+    }
   }
 
-
-  getheartbeats(id: number) {
-
-    this.api.getHeartBeat(id).subscribe((res: Heartbeat[]) => {
-      this.heartbeats = [];
-      this.temperature = [];
-      this.oxymetry = [];
-      this.stress = [];
-      this.labels = []
-      if (res.length != 0) {
-        this.showHeartBeats = true;
-        this.noHeartBeats = false;
-        this.heartbeat = res;
-      }
-      else{
+  getDataSet() {
+    this.showChart = false;
+    this.data = [];
+    this.labels = [];
+    this.api.getHeartBeat(this.updateData).subscribe((res: Heartbeat[]) => {
+      let numberOfObjects = 0;
+      if ((numberOfObjects = res.length) === 0) {
         this.noHeartBeats = true;
+        this.HeartBeatState.emit(this.noHeartBeats);
         this.showHeartBeats = false;
-        console.log("No heartbeat");
         return;
       }
 
-      this.heartbeat.sort((a, b) => {
-        const dateA = new Date(a.date_prelevement);
-        const dateB = new Date(b.date_prelevement);
-        return dateA.getTime() - dateB.getTime();
-      });
+      this.noHeartBeats = false;
+      this.HeartBeatState.emit(this.noHeartBeats);
 
+      // Chronological order
+      this.utils.sortObjects(res);
 
-      let max = 0;
-      for (const heartbeat of this.heartbeat){
-          this.labels[max] = this.formatDate(heartbeat.date_prelevement);
-          this.heartbeats[max] = parseInt(heartbeat.data1);
-          this.temperature[max] = parseInt(heartbeat.data2);
-          this.oxymetry[max] = parseInt(heartbeat.data3);
-          this.stress[max] = parseInt(heartbeat.data4);
-          ++max;
-      }
+      // Max 4 objects to show in chart
+      res = (numberOfObjects > 4 ? res.slice(-4) : res);
 
-      this.createChart();
+      // fill labels and data arrays
+      [this.data, this.labels] = this.utils.fillData(res);
 
-      console.log(this.heartbeats);
-      console.log(this.labels);
-    });
-
-  }
-
-  createChart(): void {
-    const chartCtx = this.myChart.nativeElement.getContext("2d");
-
-    if (this.chartInstance) {
-      this.chartInstance.destroy();
-    }
-
-
-    this.chartInstance = new Chart(chartCtx, {
-      type: "line",
-      data: {
-        labels: this.labels,
-        datasets: [
-          {
-            label: "Heartbeats",
-            data: this.heartbeats,
-            backgroundColor: '#A78BFA',
-            borderColor: '#A78BFA',
-            pointBackgroundColor: '#A78BFA',
-            pointHoverBorderColor: '#A78BFA',
-          },
-          {
-            label: "Température",
-            data: this.temperature,
-            backgroundColor: "#4ADE80",
-            borderColor: '#4ADE80',
-            pointBackgroundColor: '#4ADE80',
-            pointHoverBorderColor: '#4ADE80'
-          },
-          {
-            label: "Oxymétrie",
-            data: this.oxymetry,
-            backgroundColor: "#38BDF8",
-            borderColor: '#38BDF8',
-            pointBackgroundColor: '#38BDF8',
-            pointHoverBorderColor: '#38BDF8',
-          },
-          {
-            label: "Niveau de Stress",
-            data: this.stress,
-            backgroundColor: "#FB923C",
-            borderColor: '#FB923C',
-            pointBackgroundColor: '#FB923C',
-            pointHoverBorderColor: '#FB923C',
-          },
-        ],
-      },
-      options: {
-        aspectRatio: 2.5,
-      },
+      this.updateChart();
     });
   }
 
-  getIdFromParent(info: string): void {
-    const knownWord = "id";
-    const startIndex = info.indexOf(knownWord);
-    const cutString = info.substring(startIndex + knownWord.length).trim();
-    console.log(`cut string: ${cutString}`);
-    this.id = parseInt(cutString);
-    console.log(this.id);
+  updateChartInputs(){
+    this.lineChartOptions = this.utils.chartOptions(this.darkModeEnabled);
+    this.lineChartData = this.utils.chartSchemeInit(this.data, this.labels);
   }
 
-  formatDate(date: Date): string {
-    const inputDate = new Date(date);
+  updateChart(){
+    setTimeout(()=> {
+      this.updateChartInputs();
+      this.showHeartBeats = true;
+      this.heartbeats = this.data[0][this.data[0].length - 1];
+      this.temperature = this.data[1][this.data[1].length - 1];
+      this.oxymetry = this.data[2][this.data[2].length - 1];
+      this.stress = this.data[3][this.data[3].length - 1];
+    }, 150);
 
-    const month = (inputDate.getMonth() + 1).toString().padStart(2, '0');
-    const year = inputDate.getFullYear().toString().substr(-2);
-    const hour = inputDate.getHours().toString().padStart(2, '0');
-    const minute = inputDate.getMinutes().toString().padStart(2, '0');
 
-    const formattedString = `${month}/${year} ${hour}:${minute}`;
+    setTimeout(()=> {
+      this.showChart = true;
+      this.utils.scrollToBottom();
+    }, 600);
+  }
 
-    return formattedString;
+  refresh(){
+    this.getDataSet();
+  }
+
+  scrollToTop(){
+    this.utils.scrollToTop();
+  }
+
+  scrollToBottom(){
+    this.utils.scrollToBottom();
   }
 }

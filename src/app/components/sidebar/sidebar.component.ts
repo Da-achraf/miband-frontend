@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ClientService } from 'src/app/services/client.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,8 +11,8 @@ export class SidebarComponent {
 
 
   sidebarItems = [
-    { title: 'Dashbord', icon: 'fa-house', link: '/client/list', isActiveLight: true, isActiveDark: false },
-    { title: 'Clients', icon: 'fa-hospital-user', link: '/client/list', isActiveLight: false, isActiveDark: false },
+    // { title: 'Dashbord', icon: 'fa-house', link: '/client/list', isActiveLight: true, isActiveDark: false },
+    { title: 'Clients', icon: 'fa-hospital-user', link: '/client/list', isActiveLight: true, isActiveDark: false },
     { title: 'Heartbeats', icon: 'fa-chart-line', link: '/client/heartbeat', isActiveLight: false, isActiveDark: false },
   ];
 
@@ -22,7 +23,7 @@ export class SidebarComponent {
   @Output() darkModeToggled: EventEmitter<boolean> = new EventEmitter<boolean>();
   darkModeEnabled = false;
 
-  constructor(private router: Router, private activatedRoute:ActivatedRoute){}
+  constructor(private router: Router, private activatedRoute:ActivatedRoute, private clientService: ClientService){}
 
   ngOnInit(): void {
     const storedArray = localStorage.getItem('sideBarItems');
@@ -50,6 +51,7 @@ export class SidebarComponent {
 
 
   toggleDarkMode() {
+    localStorage.removeItem('darkModeEnabled');
     let inedx = this.sidebarItems.findIndex(item => {
       return item.title == this.selectedItem.title;
     });
@@ -59,6 +61,10 @@ export class SidebarComponent {
 
     this.darkModeEnabled = !this.darkModeEnabled;
     this.darkModeToggled.emit(this.darkModeEnabled);
+
+    this.clientService.toggleMode();
+
+    localStorage.setItem('darkModeEnabled', this.darkModeEnabled ? '1' : '0');
   }
 
 
@@ -79,8 +85,8 @@ export class SidebarComponent {
 
   }
 
-  ngOnDestroy(): void {
-    console.log('destroy');
+  doIt(): void {
+    this.setActiveItem(this.sidebarItems[0]);
   }
 
 }
